@@ -25,6 +25,9 @@ clients
 ```
 
 # Scripts
+## Linux
+This is unreleased and is currently in development.
+
 ## Windows
 ### run.bat
 All in one. Builds from source, adds project, starts project. Will passthru arguments.
@@ -48,7 +51,7 @@ This script will clone (or update/pull) the TrinityCore source and build it. The
 -development $false
 	default: $false
 ```	
-This script will create a project folder and copy the necessary files for an authentication server and any specified (comma delimited) realms. 
+This script will create a project folder and copy the necessary files for an authentication server and any specified (comma delimited) realms. One project can have both 3.3.5 and 8.2.0 world servers, but they will use separate authentication servers. One project will only have one authentication server for each version.
 	
 ### start_project.ps1
 ```
@@ -60,3 +63,27 @@ This script will create a project folder and copy the necessary files for an aut
 	default ""
 ```	
 This script will start up all the containers necessary for a given project. If realms argument is not set all realms for that project will be started.
+
+# Remote Access (Administration)
+When a worldserver/realm is started, the telnet port for RA will be shown. By default, the authserver will have an account "admin" with the password "admin" set up for RA. It would be very wise to change this immediately.
+From RA:
+```
+account set password admin new_password new_password
+```
+
+# Client Access
+https://trinitycore.atlassian.net/wiki/spaces/tc/pages/74006268/Client+Setup
+## 3.3.5
+Data/enUS/realmlist.ftw
+```
+set realmlist url.to.authserver:port_number
+```
+## 8.2.0
+_retail_/WTF/Config.wtf
+```
+SET portal "url.to.bnetserver:port_number"
+```
+### Custom Client Launcher
+This is not required for WotLK, only for BfA clients.
+https://arctium.io/ -> World of Warcraft -> Client Launchers -> Custom Server -> Windows/macOS -> 8.2.0.x - ... .zip
+Put the executable in the same folder as the _retail_ folder
