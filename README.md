@@ -1,0 +1,2 @@
+# trinitycore_docker
+ 
