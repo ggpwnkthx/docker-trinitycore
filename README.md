@@ -30,3 +30,23 @@ This script will create a project folder and copy the necessary files for an aut
 	default ""
 ```	
 This script will start up all the containers necessary for a given project. If realms argument is not set all realms for that project will be started.
+
+# REQUIREMENTS
+Clients must be in the "clients" folder. Put the contents of the WotLK folder into "clients/3.3.5". Put the contents of the BfA folder into "clients/8.2.0".
+For WotLK, the folder structure should look like:
+```
+clients
+    3.3.5
+        Data
+		Interface
+		{other files}
+```
+For BfA, the folder structure should look like:
+```
+clients
+    8.2.0
+	    _classic_
+		_retail_
+        Data
+		{other files}
+```
