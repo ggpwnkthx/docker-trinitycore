@@ -38,15 +38,15 @@ For WotLK, the folder structure should look like:
 clients
     3.3.5
         Data
-		Interface
-		{other files}
+        Interface
+        {other files}
 ```
 For BfA, the folder structure should look like:
 ```
 clients
     8.2.0
-	    _classic_
-		_retail_
+        _classic_
+        _retail_
         Data
-		{other files}
+        {other files}
 ```
