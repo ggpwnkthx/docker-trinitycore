@@ -79,7 +79,7 @@ Data/enUS/realmlist.ftw
 set realmlist url.to.authserver:port_number
 ```
 ## 8.2.0
-_retail_/WTF/Config.wtf
+\_retail\_/WTF/Config.wtf
 ```
 SET portal "url.to.bnetserver:port_number"
 ```
