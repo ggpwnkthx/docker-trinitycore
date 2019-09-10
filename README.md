@@ -86,4 +86,4 @@ SET portal "url.to.bnetserver:port_number"
 ### Custom Client Launcher
 This is not required for WotLK, only for BfA clients.
 https://arctium.io/ -> World of Warcraft -> Client Launchers -> Custom Server -> Windows/macOS -> 8.2.0.x - ... .zip
-Put the executable in the same folder as the _retail_ folder
+Put the executable in the same folder as the \_retail\_ folder
