@@ -18,7 +18,7 @@ $LOCAL_CLIENT_DIR = "$PSScriptRoot\$CLIENT_DIR".Replace("/", "\")
 
 # Build compiler container
 echo "Building universal TrinityCore image..."
-docker build -t trinitycore:universal -f .\docker\Dockerfile_compiler .\docker\
+docker build -t trinitycore:universal -f .\docker\Dockerfile_universal .\docker\
 
 # Create directories
 docker run -it --rm `

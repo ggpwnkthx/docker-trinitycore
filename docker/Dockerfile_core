@@ -1,5 +1,0 @@
-FROM trinitycore:compiler
-
-ADD bin /opt/trinitycore/bin
-ADD etc /opt/trinitycore/etc
-ADD lib /opt/trinitycore/lib
