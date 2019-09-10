@@ -62,8 +62,7 @@ docker run -it --rm `
             -DCONF_DIR=/opt/trinitycore/etc \
             -DLIBSDIR=/opt/trinitycore/lib \
             -DSCRIPTS=dynamic \
-            -DWITH_WARNINGS=1 \
-            -CMAKE_VERBOSE_MAKEFILE=1;
+            -DWITH_WARNINGS=1;
         make -j `$(nproc);
         make install;
     ".Replace("`r","")
