@@ -31,7 +31,7 @@ All in one. Builds from source, adds a project, starts the project. Will passthr
 ### build.sh
 ```
 -r | --repo "git://..."
-	default: "github.com/TrinityCore/TrinityCore.git"
+	default: "git://github.com/TrinityCore/TrinityCore.git"
 -b | --branch "master" or "3.3.5"
 	default: "master"
 ```	
@@ -67,7 +67,7 @@ All in one. Builds from source, adds a project, starts the project. Will passthr
 ### build.ps1
 ```
 -repo "git://..."
-	default: "github.com/TrinityCore/TrinityCore.git"
+	default: "git://github.com/TrinityCore/TrinityCore.git"
 -branch "master" or "3.3.5"
 	default: "master"
 ```	
