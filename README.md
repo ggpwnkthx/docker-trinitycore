@@ -26,6 +26,8 @@ clients
 
 # Scripts
 ## Linux
+### run.sh
+All in one. Builds from source, adds a project, starts the project. Will passthru arguments.
 ### build.sh
 ```
 -r | --repo "git://..."
@@ -61,7 +63,7 @@ This script will start up all the containers necessary for a given project. If r
 
 ## Windows
 ### run.bat
-All in one. Builds from source, adds project, starts project. Will passthru arguments.
+All in one. Builds from source, adds a project, starts the project. Will passthru arguments.
 ### build.ps1
 ```
 -repo "git://..."

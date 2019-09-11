@@ -20,7 +20,7 @@ while true; do
         shift;
         REALMS=($(echo $1 | sed 's/,/ /g'));
         ;;
-    -d | --repo )
+    -d | --development )
         DEVELOPMENT=true;
         ;;
     --)
