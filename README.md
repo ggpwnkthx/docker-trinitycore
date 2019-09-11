@@ -26,7 +26,38 @@ clients
 
 # Scripts
 ## Linux
-This is unreleased and is currently in development.
+### build.sh
+```
+-r | --repo "git://..."
+	default: "github.com/TrinityCore/TrinityCore.git"
+-b | --branch "master" or "3.3.5"
+	default: "master"
+```	
+This script will clone (or update/pull) the TrinityCore source and build it. The repository can be changed, but for most people, the only argument you'll want to change is the branch. For BfA, use "master". For WotLK, use "3.3.5". 
+ 
+### add_project.sh
+```
+-p | --project "Name of Project"
+	default: "untitled"
+-v | --version "8.2.0" or "3.3.5"
+	default: "8.2.0"
+-r | --realms "Trinity,Scarlet,Molten"
+	default: "Trinity"
+-d | --development
+	default: false
+```	
+This script will create a project folder and copy the necessary files for an authentication server and any specified (comma delimited) realms. One project can have both 3.3.5 and 8.2.0 world servers, but they will use separate authentication servers. One project will only have one authentication server for each version.
+	
+### start_project.sh
+```
+-p | --project "Name of Project"
+	default: "untitled"
+-v | --version "8.2.0" or "3.3.5"
+	default: "8.2.0"
+-r | --realms "Trinity,Scarlet,Molten"
+	default ""
+```	
+This script will start up all the containers necessary for a given project. If realms argument is not set all realms for that project will be started.
 
 ## Windows
 ### run.bat
