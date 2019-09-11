@@ -9,12 +9,13 @@ if($branch -eq "master") {
 }
 $sql_root_pw = "trinity_root"
 
+$SCRIPTROOT = "$PSScriptRoot/.."
 $SOURCE_DIR = "source/$version"
-$LOCAL_SOURCE_DIR = "$PSScriptRoot\$SOURCE_DIR".Replace("/", "\")
+$LOCAL_SOURCE_DIR = "$SCRIPTROOT\$SOURCE_DIR".Replace("/", "\")
 $BUILD_DIR = "build/$version"
-$LOCAL_BUILD_DIR = "$PSScriptRoot\$BUILD_DIR".Replace("/", "\")
+$LOCAL_BUILD_DIR = "$SCRIPTROOT\$BUILD_DIR".Replace("/", "\")
 $CLIENT_DIR = "clients/$version"
-$LOCAL_CLIENT_DIR = "$PSScriptRoot\$CLIENT_DIR".Replace("/", "\")
+$LOCAL_CLIENT_DIR = "$SCRIPTROOT\$CLIENT_DIR".Replace("/", "\")
 
 # Build compiler container
 echo "Building universal TrinityCore image..."
@@ -22,7 +23,7 @@ docker build -t trinitycore:universal -f .\docker\Dockerfile_universal .\docker\
 
 # Create directories
 docker run -it --rm `
-    -v $PSScriptRoot\:/prepare `
+    -v $SCRIPTROOT\:/prepare `
     trinitycore:universal bash -c "
         mkdir -p /prepare/$SOURCE_DIR; 
         mkdir -p /prepare/$BUILD_DIR/bin; 
@@ -69,7 +70,7 @@ docker run -it --rm `
 
 # Rename config files
 docker run -it --rm `
-    -v $PSScriptRoot\:/prepare `
+    -v $SCRIPTROOT\:/prepare `
     trinitycore:universal bash -c "
         cp /prepare/$BUILD_DIR/etc/worldserver.conf.dist /prepare/$BUILD_DIR/etc/worldserver.conf;
         cp /prepare/$BUILD_DIR/etc/authserver.conf.dist /prepare/$BUILD_DIR/etc/authserver.conf;
@@ -162,7 +163,7 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\auth\auth))
     # Copy baseline and build auth database on top
     echo "Copying initial SQL data for auth..."
     docker run -it --rm `
-        -v $PSScriptRoot\:/prepare `
+        -v $SCRIPTROOT\:/prepare `
         trinitycore:universal bash -c "
             mkdir -p /prepare/$BUILD_DIR/db/auth; 
             rsync -ah  --info=progress2 /prepare/$BUILD_DIR/db/base/ /prepare/$BUILD_DIR/db/auth;
@@ -214,7 +215,7 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\realm\world))
     # Copy baseline and build world and character databases on top
     echo "Copying initial SQL data for realms..."
     docker run -it --rm `
-        -v $PSScriptRoot\:/prepare `
+        -v $SCRIPTROOT\:/prepare `
         trinitycore:universal bash -c "
             mkdir -p /prepare/$BUILD_DIR/db/realm; 
             rsync -ah  --info=progress2 /prepare/$BUILD_DIR/db/base/ /prepare/$BUILD_DIR/db/realm;

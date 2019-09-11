@@ -32,7 +32,7 @@ PROJECT="${PROJECT:-untitled}"
 VERSION="${VERSION:-8.2.0}"
 
 SQL_ROOT_PW="trinity_root"
-SCRIPTROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SCRIPTROOT=../"$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/.."
 SOURCE_DIR=source/$VERSION
 LOCAL_SOURCE_DIR=$SCRIPTROOT/$SOURCE_DIR
 BUILD_DIR=build/$VERSION

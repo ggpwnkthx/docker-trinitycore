@@ -4,14 +4,15 @@
     [string]$realms = ""
 )
 
+$SCRIPTROOT = "$PSScriptRoot/.."
 $SOURCE_DIR = "source/$version"
-$LOCAL_SOURCE_DIR = "$PSScriptRoot\$SOURCE_DIR".Replace("/", "\")
+$LOCAL_SOURCE_DIR = "$SCRIPTROOT\$SOURCE_DIR".Replace("/", "\")
 $BUILD_DIR = "build/$version"
-$LOCAL_BUILD_DIR = "$PSScriptRoot\$BUILD_DIR".Replace("/", "\")
+$LOCAL_BUILD_DIR = "$SCRIPTROOT\$BUILD_DIR".Replace("/", "\")
 $CLIENT_DIR = "clients/$version"
-$LOCAL_CLIENT_DIR = "$PSScriptRoot\$CLIENT_DIR".Replace("/", "\")
+$LOCAL_CLIENT_DIR = "$SCRIPTROOT\$CLIENT_DIR".Replace("/", "\")
 $PROJECT_DIR = "$project/$version"
-$LOCAL_PROJECT_DIR = "$PSScriptRoot\projects\$PROJECT_DIR".Replace("/", "\")
+$LOCAL_PROJECT_DIR = "$SCRIPTROOT\projects\$PROJECT_DIR".Replace("/", "\")
 
 $CONTAINER_PREFIX = "trinitycore_$project`_$version"
 

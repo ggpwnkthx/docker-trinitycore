@@ -1,5 +1,5 @@
 #!/bin/bash
 
-chmod +x build.sh && ./build.sh "$@"
-chmod +x add_project.sh && ./add_project.sh "$@"
-chmod +x start_project.sh && ./start_project.sh "$@"
+chmod +x scripts/build.sh && scripts/build.sh "$@"
+chmod +x scripts/add_project.sh && scripts/add_project.sh "$@"
+chmod +x scripts/start_project.sh && scripts/start_project.sh "$@"
