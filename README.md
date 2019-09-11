@@ -1,3 +1,11 @@
+# Usage
+The run scipts listed below will clone from a git repo, compile the source, extract map data from client, create a server project (inludes all databases, auth/bnetserver and worldserver), and starts the project's containers.
+
+Arguments given to the run script will be passed thru to the respective scripts.
+## Windows
+Use the run.bat file.
+## Linux
+Use the run.sh file.
 # Requirements
 ## Docker
 ### Linux
@@ -26,8 +34,6 @@ clients
 
 # Scripts
 ## Linux
-### run.sh
-All in one. Builds from source, adds a project, starts the project. Will passthru arguments.
 ### build.sh
 ```
 -r | --repo "git://..."
@@ -62,8 +68,6 @@ This script will create a project folder and copy the necessary files for an aut
 This script will start up all the containers necessary for a given project. If realms argument is not set all realms for that project will be started.
 
 ## Windows
-### run.bat
-All in one. Builds from source, adds a project, starts the project. Will passthru arguments.
 ### build.ps1
 ```
 -repo "git://..."
