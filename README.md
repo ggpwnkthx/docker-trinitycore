@@ -34,6 +34,8 @@ clients
 
 # Scripts
 ## Linux
+### run.sh
+All in one. Builds from source, adds a project, starts the project. Will passthru arguments.
 ### build.sh
 ```
 -r | --repo "git://..."
@@ -68,6 +70,8 @@ This script will create a project folder and copy the necessary files for an aut
 This script will start up all the containers necessary for a given project. If realms argument is not set all realms for that project will be started.
 
 ## Windows
+### run.bat
+All in one. Builds from source, adds a project, starts the project. Will passthru arguments.
 ### build.ps1
 ```
 -repo "git://..."

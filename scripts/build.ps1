@@ -19,6 +19,7 @@ $LOCAL_CLIENT_DIR = "$SCRIPTROOT\$CLIENT_DIR".Replace("/", "\")
 
 # Build compiler container
 echo "Building universal TrinityCore image..."
+cd $SCRIPTROOT
 docker build -t trinitycore:universal -f .\docker\Dockerfile_universal .\docker\
 
 # Create directories
@@ -276,3 +277,16 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\realm\world))
     docker kill $db_container
 }
 docker network rm trinitycore_db_build_$version
+
+# Git NUFAD for web-based administration
+docker run -it --rm `
+    -v $SCRIPTROOT\:/prepare `
+    trinitycore:universal bash -c "
+        cd /tmp
+        git clone https://github.com/ggpwnkthx/nufad.git
+        mkdir /prepare/docker/nufad
+        rsync -ah  --info=progress2 /tmp/nufad/docker/nufad/ /prepare/docker/nufad;
+        mkdir /prepare/$BUILD_DIR/nufad
+        rsync -ah  --info=progress2 /tmp/nufad/app/ /prepare/$BUILD_DIR/nufad;
+    "
+docker build -t trinitycore:admin -f .\docker\nufad\Dockerfile .\docker\nufad\
