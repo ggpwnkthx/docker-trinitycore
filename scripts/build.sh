@@ -297,3 +297,17 @@ if [ ! -d $LOCAL_BUILD_DIR/db/realm/world ]; then
 	docker kill $db_container
 fi
 docker network rm trinitycore_db_build_$VERSION
+
+# Git NUFAD for web-based administration
+docker run -it --rm \
+    -v $SCRIPTROOT\:/prepare \
+    trinitycore:universal bash -c "
+        mkdir -p /tmp;
+        cd /tmp;
+        git clone https://github.com/ggpwnkthx/nufad.git;
+        mkdir -p /prepare/docker/nufad;
+        rsync -ah  --info=progress2 /tmp/nufad/docker/nufad/ /prepare/docker/nufad;
+        mkdir /prepare/$BUILD_DIR/nufad;
+        rsync -ah  --info=progress2 /tmp/nufad/app/ /prepare/$BUILD_DIR/nufad;
+    "
+docker build -t trinitycore:admin -f .\docker\nufad\Dockerfile .\docker\nufad\

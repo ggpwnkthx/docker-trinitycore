@@ -96,3 +96,25 @@ if(!(Test-Path $LOCAL_PROJECT_DIR\source\sql)) {
             rsync -ah --info=progress2 /prepare/$BUILD_DIR/sql/ /prepare/$PROJECT_DIR/source/sql;
         ".Replace("`r","")
 }
+
+# Add NUFAD Instance
+if(!(Test-Path $LOCAL_PROJECT_DIR\admin)) {
+    echo "Preparing admin interface..."
+    docker run -it --rm `
+        -v $SCRIPTROOT\:/prepare `
+        trinitycore:universal bash -c "
+            mkdir -p /prepare/$PROJECT_DIR/admin;
+            rsync -ah  --info=progress2 /prepare/$BUILD_DIR/nufad/ /prepare/$PROJECT_DIR/admin;
+        ".Replace("`r","")
+    # Create SSL Certificate
+    docker run -it --rm `
+        -v $SCRIPTROOT\:/prepare `
+        trinitycore:universal bash -c "
+            mkdir -p /prepare/$PROJECT_DIR/admin/certs;
+            openssl genrsa -out /prepare/$PROJECT_DIR/admin/certs/ssl.pass.key 2048;
+            openssl rsa -in /prepare/$PROJECT_DIR/admin/certs/ssl.pass.key -out /prepare/$PROJECT_DIR/admin/certs/ssl.key;
+            rm /prepare/$PROJECT_DIR/admin/certs/ssl.pass.key;
+            openssl req -new -key /prepare/$PROJECT_DIR/admin/certs/ssl.key -out /prepare/$PROJECT_DIR/admin/certs/ssl.csr -subj `"/C=NA/ST=NA/`";
+	        openssl x509 -req -days 7120 -in /prepare/$PROJECT_DIR/admin/certs/ssl.csr -signkey /prepare/$PROJECT_DIR/admin/certs/ssl.key -out /prepare/$PROJECT_DIR/admin/certs/ssl.crt;
+        ".Replace("`r","")
+}

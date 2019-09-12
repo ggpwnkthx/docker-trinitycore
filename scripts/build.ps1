@@ -7,7 +7,7 @@ if($branch -eq "master") {
 } else {
     $version = $branch
 }
-$sql_root_pw = "trinity_root"
+$SQL_ROOT_PW = "trinity_root"
 
 $SCRIPTROOT = "$PSScriptRoot/.."
 $SOURCE_DIR = "source/$version"
@@ -118,10 +118,10 @@ if(!(Test-Path $LOCAL_BUILD_DIR\bin\data\mmaps))
 docker run -it --rm `
     -v $LOCAL_BUILD_DIR\:/opt/trinitycore `
     trinitycore:universal bash -c "
-        sed -i 's/^LoginDatabaseInfo.*`$/LoginDatabaseInfo  \= \`"auth_db;3306;root;$sql_root_pw;auth\`"/g' /opt/trinitycore/etc/*;
-        sed -i 's/^WorldDatabaseInfo.*`$/WorldDatabaseInfo  \= \`"realm_db;3306;root;$sql_root_pw;world\`"/g' /opt/trinitycore/etc/*;
-        sed -i 's/^CharacterDatabaseInfo.*`$/CharacterDatabaseInfo  \= \`"realm_db;3306;root;$sql_root_pw;characters\`"/g' /opt/trinitycore/etc/*;
-        sed -i 's/^HotfixDatabaseInfo.*`$/HotfixDatabaseInfo  \= \`"realm_db;3306;root;$sql_root_pw;hotfixes\`"/g' /opt/trinitycore/etc/*;
+        sed -i 's/^LoginDatabaseInfo.*`$/LoginDatabaseInfo  \= \`"auth_db;3306;root;$SQL_ROOT_PW;auth\`"/g' /opt/trinitycore/etc/*;
+        sed -i 's/^WorldDatabaseInfo.*`$/WorldDatabaseInfo  \= \`"realm_db;3306;root;$SQL_ROOT_PW;world\`"/g' /opt/trinitycore/etc/*;
+        sed -i 's/^CharacterDatabaseInfo.*`$/CharacterDatabaseInfo  \= \`"realm_db;3306;root;$SQL_ROOT_PW;characters\`"/g' /opt/trinitycore/etc/*;
+        sed -i 's/^HotfixDatabaseInfo.*`$/HotfixDatabaseInfo  \= \`"realm_db;3306;root;$SQL_ROOT_PW;hotfixes\`"/g' /opt/trinitycore/etc/*;
         sed -i 's/^CMakeCommand.*`$/CMakeCommand  \= \\\`"\/use\/bin\/cmake\\\`"/g' /opt/trinitycore/etc/*;
         sed -i 's/^DataDir.*`$/DataDir  \= \\\`"\/opt\/trinitycore\/bin\/data\\\`"/g' /opt/trinitycore/etc/*;
         sed -i 's/^LogsDir.*`$/LogsDir  \= \\\`"\/opt\/trinitycore\/logs\\\`"/g' /opt/trinitycore/etc/*;
@@ -147,7 +147,7 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\base\mysql))
     $db_container = (docker run -dP --rm `
         --network trinitycore_db_build_$version `
         --network-alias $sql_host_alias `
-        -e "MYSQL_ROOT_PASSWORD=$sql_root_pw" `
+        -e "MYSQL_ROOT_PASSWORD=$SQL_ROOT_PW" `
         -v $LOCAL_BUILD_DIR\db\base:/var/lib/mysql `
         mariadb:latest --innodb-flush-method=O_DSYNC)
     # Wait for database to complete initilization
@@ -189,7 +189,7 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\auth\auth))
     docker run -it --rm `
         --network trinitycore_db_build_$version `
         -v $LOCAL_SOURCE_DIR\:/src/trinitycore `
-        mariadb:latest mysql -h"$sql_host_alias" -P3306 -uroot -p"$sql_root_pw" -e "
+        mariadb:latest mysql -h"$sql_host_alias" -P3306 -uroot -p"$SQL_ROOT_PW" -e "
             CREATE DATABASE auth DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ; `
         ".Replace("`r","")
     # Import schema
@@ -198,14 +198,14 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\auth\auth))
         --network trinitycore_db_build_$version `
         -v $LOCAL_SOURCE_DIR\:/src/trinitycore `
         mariadb:latest bash -c "
-            cat /src/trinitycore/sql/base/auth_database.sql | mysql -h$sql_host_alias -P3306 -uroot -p$sql_root_pw -Dauth;
+            cat /src/trinitycore/sql/base/auth_database.sql | mysql -h$sql_host_alias -P3306 -uroot -p$SQL_ROOT_PW -Dauth;
         ".Replace("`r","")
     # Add admin account
     echo "Adding admin account for RA service..."
     docker run -it --rm `
         --network trinitycore_db_build_$version `
         -v $LOCAL_SOURCE_DIR\:/src/trinitycore `
-        mariadb:latest mysql -h"$sql_host_alias" -P3306 -uroot -p"$sql_root_pw" -Dauth -e "
+        mariadb:latest mysql -h"$sql_host_alias" -P3306 -uroot -p"$SQL_ROOT_PW" -Dauth -e "
             INSERT INTO account (id, username, sha_pass_hash) VALUES (1, 'ADMIN', '8301316D0D8448A34FA6D0C6BF1CBFA2B4A1A93A') ; `
             INSERT INTO account_access (id, gmlevel, RealmID) VALUES (1, 3, -1) ; `
         ".Replace("`r","")
@@ -241,7 +241,7 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\realm\world))
     docker run -it --rm `
         --network trinitycore_db_build_$version `
         -v $LOCAL_SOURCE_DIR\:/src/trinitycore `
-        mariadb:latest mysql -h"$sql_host_alias" -P3306 -uroot -p"$sql_root_pw" -e "
+        mariadb:latest mysql -h"$sql_host_alias" -P3306 -uroot -p"$SQL_ROOT_PW" -e "
             CREATE DATABASE characters DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ; `
             CREATE DATABASE world DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ; `
         ".Replace("`r","")
@@ -251,8 +251,8 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\realm\world))
         --network trinitycore_db_build_$version `
         -v $LOCAL_SOURCE_DIR\:/src/trinitycore `
         mariadb:latest bash -c "
-            cat /src/trinitycore/sql/base/characters_database.sql | mysql -h$sql_host_alias -P3306 -uroot -p$sql_root_pw -Dcharacters;
-            cat /src/trinitycore/sql/base/world_database.sql | mysql -h$sql_host_alias -P3306 -uroot -p$sql_root_pw -Dworld;
+            cat /src/trinitycore/sql/base/characters_database.sql | mysql -h$sql_host_alias -P3306 -uroot -p$SQL_ROOT_PW -Dcharacters;
+            cat /src/trinitycore/sql/base/world_database.sql | mysql -h$sql_host_alias -P3306 -uroot -p$SQL_ROOT_PW -Dworld;
         ".Replace("`r","")
 
     if($branch -eq "master" -and !(Test-Path $LOCAL_BUILD_DIR\db\realm\hotfix))
@@ -262,7 +262,7 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\realm\world))
         docker run -it --rm `
             --network trinitycore_db_build_$version `
             -v $LOCAL_SOURCE_DIR\:/src/trinitycore `
-            mariadb:latest mysql -h"$sql_host_alias" -P3306 -uroot -p"$sql_root_pw" -e "
+            mariadb:latest mysql -h"$sql_host_alias" -P3306 -uroot -p"$SQL_ROOT_PW" -e "
                 CREATE DATABASE hotfixes DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ; `
             ".Replace("`r","")
         # Import hotfixes
@@ -271,7 +271,7 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\realm\world))
             --network trinitycore_db_build_$version `
             -v $LOCAL_SOURCE_DIR\:/src/trinitycore `
             mariadb:latest bash -c "
-                cat /src/trinitycore/sql/base/hotfixes_database.sql | mysql -h$sql_host_alias -P3306 -uroot -p$sql_root_pw -Dhotfixes;
+                cat /src/trinitycore/sql/base/hotfixes_database.sql | mysql -h$sql_host_alias -P3306 -uroot -p$SQL_ROOT_PW -Dhotfixes;
             ".Replace("`r","")
     }
     docker kill $db_container
@@ -282,11 +282,12 @@ docker network rm trinitycore_db_build_$version
 docker run -it --rm `
     -v $SCRIPTROOT\:/prepare `
     trinitycore:universal bash -c "
-        cd /tmp
-        git clone https://github.com/ggpwnkthx/nufad.git
-        mkdir /prepare/docker/nufad
+        mkdir -p /tmp;
+        cd /tmp;
+        git clone https://github.com/ggpwnkthx/nufad.git;
+        mkdir -p /prepare/docker/nufad;
         rsync -ah  --info=progress2 /tmp/nufad/docker/nufad/ /prepare/docker/nufad;
-        mkdir /prepare/$BUILD_DIR/nufad
+        mkdir /prepare/$BUILD_DIR/nufad;
         rsync -ah  --info=progress2 /tmp/nufad/app/ /prepare/$BUILD_DIR/nufad;
-    "
+    ".Replace("`r","")
 docker build -t trinitycore:admin -f .\docker\nufad\Dockerfile .\docker\nufad\
