@@ -32,7 +32,7 @@ PROJECT="${PROJECT:-untitled}"
 VERSION="${VERSION:-8.2.0}"
 
 SQL_ROOT_PW="trinity_root"
-SCRIPTROOT=../"$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/.."
+SCRIPTROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/.."
 SOURCE_DIR=source/$VERSION
 LOCAL_SOURCE_DIR=$SCRIPTROOT/$SOURCE_DIR
 BUILD_DIR=build/$VERSION
@@ -44,7 +44,7 @@ LOCAL_PROJECT_DIR=$SCRIPTROOT/$PROJECT_DIR
 
 CONTAINER_PREFIX=trinitycore_$PROJECT\_$VERSION
 
-if [ -z "$(docker ps -qf \"name=$CONTAINER_PREFIX\_auth_db\")" ]; then
+if [ -z "$(docker ps -qf name=$CONTAINER_PREFIX\_auth_db)" ]; then
 	echo "Starting auth database..."
 	docker run -dP --rm \
 		--name $CONTAINER_PREFIX\_auth_db \
@@ -58,7 +58,7 @@ echo "Waiting for auth database to be ready..."
 docker run -it --rm \
     --network $CONTAINER_PREFIX\_auth \
     mariadb:latest bash -c "while ! mysqladmin ping -hauth_db --silent; do sleep 1; done"
-if [ -z "$(docker ps -qf \"name=$CONTAINER_PREFIX\_auth_server\")" ]; then
+if [ -z "$(docker ps -qf name=$CONTAINER_PREFIX\_auth_server)" ]; then
 	echo "Starting auth server..."
 	case $VERSION in 
 		"8.2.0")
@@ -129,7 +129,7 @@ for realm in ${REALMS[@]}; do
     fi
 	realm_id=$(echo $realm_id | sed ':a;N;$!ba;s/\n/ /g')
 	
-	if [ -z "$(docker ps -qf \"name=$CONTAINER_PREFIX\_$realm\_db\")" ]; then
+	if [ -z "$(docker ps -qf name=$CONTAINER_PREFIX\_$realm\_db)" ]; then
 		echo "Starting $realm realm database..."
 		docker run -dP --rm \
 			--name $CONTAINER_PREFIX\_$realm\_db \
@@ -144,49 +144,62 @@ for realm in ${REALMS[@]}; do
         --network $CONTAINER_PREFIX\_$realm \
         mariadb:latest bash -c "while ! mysqladmin ping -hrealm_db --silent; do sleep 1; done"
 	
-	if [ -z "$(docker ps -qf \"name=$CONTAINER_PREFIX\_$realm\_server\")" ]; then
-		echo "Configuring ports..."
-		docker run -dP --rm \
-			--name $CONTAINER_PREFIX\_portcheck \
-			--expose 10000 \
-			--expose 10001 \
-			trinitycore:universal sleep 30
-		while [ -z "$docker_inspect" ]; do 
-			docker_inspect=($(docker inspect --format='{{range $conf := .NetworkSettings.Ports}} {{(index $conf 0).HostPort}} {{end}}' $CONTAINER_PREFIX\_portcheck))
-		done
-		port_world=${docker_inspect[0]}
-		port_instance=${docker_inspect[1]}
-		docker kill $CONTAINER_PREFIX\_portcheck
-		unset docker_inspect
-
+	if [ -z "$(docker ps -qf name=$CONTAINER_PREFIX\_$realm\_server)" ]; then
+		port_world=$(cat $LOCAL_REALM_DIR/worldserver.conf | grep -e '^WorldServerPort' | awk '{print $3}');
+		port_instance=$(cat $LOCAL_REALM_DIR/worldserver.conf | grep -e '^InstanceServerPort' | awk '{print $3}');
+		port_remote=$(cat $LOCAL_REALM_DIR/worldserver.conf | grep -e '^Ra.Port' | awk '{print $3}');
+		port_soap=$(cat $LOCAL_REALM_DIR/worldserver.conf | grep -e '^SOAP.Port' | awk '{print $3}');
 		echo "Starting $realm realm server..."
-		docker run -dP --rm \
-			--name $CONTAINER_PREFIX\_$realm\_server \
-			--network $CONTAINER_PREFIX\_$realm \
-			--network-alias $realm\_world \
-			--expose 3443 \
-			--expose 7878 \
-			-p $port_world\:$port_world \
-			-p $port_instance\:$port_instance \
-			-v $LOCAL_PROJECT_DIR/server/bin:/opt/trinitycore/bin \
-			-v $LOCAL_PROJECT_DIR/server/lib:/opt/trinitycore/lib \
-			-v $LOCAL_PROJECT_DIR/source:/src/trinitycore \
-			-v $LOCAL_REALM_DIR/worldserver.conf:/opt/trinitycore/temp/worldserver.conf \
-			-v $LOCAL_REALM_DIR/logs:/opt/trinitycore/logs \
-			trinitycore:universal bash -c "
-				mkdir -p /opt/trinitycore/etc;
-				cp /opt/trinitycore/temp/worldserver.conf /opt/trinitycore/etc/worldserver.conf;
-				sed -i 's/^RealmID.*\$/RealmID \= $realm_id/g' /opt/trinitycore/etc/worldserver.conf;
-				sed -i 's/^WorldServerPort.*\$/WorldServerPort \= $port_world/g' /opt/trinitycore/etc/worldserver.conf;
-				sed -i 's/^InstanceServerPort.*\$/InstanceServerPort \= $port_instance/g' /opt/trinitycore/etc/worldserver.conf;
-				sleep 5; 
-				/opt/trinitycore/bin/worldserver
-			"
+		case $VERSION in 
+			"8.2.0")
+				docker run -dP --rm \
+					--name $CONTAINER_PREFIX\_$realm\_server \
+					--network $CONTAINER_PREFIX\_$realm \
+					--network-alias $realm\_world \
+					-p $port_remote\:$port_remote \
+					-p $port_soap\:$port_soap \
+					-p $port_world\:$port_world \
+					-p $port_instance\:$port_instance \
+					-v $LOCAL_PROJECT_DIR/server/bin:/opt/trinitycore/bin \
+					-v $LOCAL_PROJECT_DIR/server/lib:/opt/trinitycore/lib \
+					-v $LOCAL_PROJECT_DIR/source:/src/trinitycore \
+					-v $LOCAL_REALM_DIR/worldserver.conf:/opt/trinitycore/temp/worldserver.conf \
+					-v $LOCAL_REALM_DIR/logs:/opt/trinitycore/logs \
+					trinitycore:universal bash -c "
+						mkdir -p /opt/trinitycore/etc;
+						cp /opt/trinitycore/temp/worldserver.conf /opt/trinitycore/etc/worldserver.conf;
+						sed -i 's/^RealmID.*\$/RealmID \= $realm_id/g' /opt/trinitycore/etc/worldserver.conf;
+						sleep 10; 
+						/opt/trinitycore/bin/worldserver
+					";
+				;;
+			"3.3.5")
+				docker run -dP --rm \
+					--name $CONTAINER_PREFIX\_$realm\_server \
+					--network $CONTAINER_PREFIX\_$realm \
+					--network-alias $realm\_world \
+					-p $port_remote\:$port_remote \
+					-p $port_soap\:$port_soap \
+					-p $port_world\:$port_world \
+					-v $LOCAL_PROJECT_DIR/server/bin:/opt/trinitycore/bin \
+					-v $LOCAL_PROJECT_DIR/server/lib:/opt/trinitycore/lib \
+					-v $LOCAL_PROJECT_DIR/source:/src/trinitycore \
+					-v $LOCAL_REALM_DIR/worldserver.conf:/opt/trinitycore/temp/worldserver.conf \
+					-v $LOCAL_REALM_DIR/logs:/opt/trinitycore/logs \
+					trinitycore:universal bash -c "
+						mkdir -p /opt/trinitycore/etc;
+						cp /opt/trinitycore/temp/worldserver.conf /opt/trinitycore/etc/worldserver.conf;
+						sed -i 's/^RealmID.*\$/RealmID \= $realm_id/g' /opt/trinitycore/etc/worldserver.conf;
+						sleep 10; 
+						/opt/trinitycore/bin/worldserver
+					";
+				;;
+		esac
 		echo "Connecting $realm realm server to auth network..."
-		docker network connect $CONTAINER_PREFIX\_auth $CONTAINER_PREFIX\_$realm
+		docker network connect $CONTAINER_PREFIX\_auth $CONTAINER_PREFIX\_$realm\_server
 	fi
     while [ -z "$docker_inspect" ]; do 
-        docker_inspect=($(docker inspect --format='{{range $conf := .NetworkSettings.Ports}} {{(index $conf 0).HostPort}} {{end}}' $CONTAINER_PREFIX\_$realm))
+        docker_inspect=($(docker inspect --format='{{range $conf := .NetworkSettings.Ports}} {{(index $conf 0).HostPort}} {{end}}' $CONTAINER_PREFIX\_$realm\_server))
     done
     port_ra=${docker_inspect[0]}
 	unset docker_inspect
@@ -202,7 +215,7 @@ for realm in ${REALMS[@]}; do
 done
 
 # Start NUFAD
-if [ -z "$(docker ps -qf \"name=$CONTAINER_PREFIX\_admin\")" ]; then
+if [ -z "$(docker ps -qf name=$CONTAINER_PREFIX\_admin)" ]; then
     docker run -dP --rm \
         --name $CONTAINER_PREFIX\_admin \
         -e TC_PREFIX=$CONTAINER_PREFIX \
