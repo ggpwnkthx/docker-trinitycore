@@ -304,10 +304,10 @@ docker run -it --rm \
     trinitycore:universal bash -c "
         mkdir -p /tmp;
         cd /tmp;
-        git clone https://github.com/ggpwnkthx/nufad.git;
+        git clone https://github.com/ggpwnkthx/nufad_installer.git;
         mkdir -p /prepare/docker/nufad;
-        rsync -ah  --info=progress2 /tmp/nufad/docker/nufad/ /prepare/docker/nufad;
-        mkdir /prepare/$BUILD_DIR/nufad;
-        rsync -ah  --info=progress2 /tmp/nufad/app/ /prepare/$BUILD_DIR/nufad;
+        rsync -ah  --info=progress2 /tmp/nufad_installer/docker/nufad/ /prepare/docker/nufad;
+        mkdir -p /prepare/$BUILD_DIR/nufad;
+        git clone https://github.com/ggpwnkthx/nufad.git /prepare/$BUILD_DIR/nufad;
     "
-docker build -t trinitycore:admin -f .\docker\nufad\Dockerfile .\docker\nufad\
+docker build -t trinitycore:admin -f ./docker/nufad/Dockerfile ./docker/nufad/
