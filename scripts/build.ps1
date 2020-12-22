@@ -279,6 +279,7 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\realm\world))
 docker network rm trinitycore_db_build_$version
 
 # Git NUFAD for web-based administration
+<#
 docker run -it --rm `
     -v $SCRIPTROOT\:/prepare `
     trinitycore:universal bash -c "
@@ -291,3 +292,4 @@ docker run -it --rm `
         rsync -ah  --info=progress2 /tmp/nufad/app/ /prepare/$BUILD_DIR/nufad;
     ".Replace("`r","")
 docker build -t trinitycore:admin -f .\docker\nufad\Dockerfile .\docker\nufad\
+#>
