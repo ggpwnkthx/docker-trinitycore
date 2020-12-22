@@ -25,7 +25,7 @@ clients
 For BfA, the folder structure should look like:
 ```
 clients
-    8.2.0
+    9.0.2
         _classic_
         _retail_
         Data
@@ -49,8 +49,8 @@ This script will clone (or update/pull) the TrinityCore source and build it. The
 ```
 -p | --project "Name of Project"
 	default: "untitled"
--v | --version "8.2.0" or "3.3.5"
-	default: "8.2.0"
+-v | --version "9.0.2" or "3.3.5"
+	default: "9.0.2"
 -r | --realms "Trinity,Scarlet,Molten"
 	default: "Trinity"
 -d | --development
@@ -62,8 +62,8 @@ This script will create a project folder and copy the necessary files for an aut
 ```
 -p | --project "Name of Project"
 	default: "untitled"
--v | --version "8.2.0" or "3.3.5"
-	default: "8.2.0"
+-v | --version "9.0.2" or "3.3.5"
+	default: "9.0.2"
 -r | --realms "Trinity,Scarlet,Molten"
 	default ""
 ```	
@@ -85,8 +85,8 @@ This script will clone (or update/pull) the TrinityCore source and build it. The
 ```
 -project "Name of Project"
 	default: "untitled"
--version "8.2.0" or "3.3.5"
-	default: "8.2.0"
+-version "9.0.2" or "3.3.5"
+	default: "9.0.2"
 -realms "Trinity,Scarlet,Molten"
 	default: "Trinity"
 -development $false
@@ -98,8 +98,8 @@ This script will create a project folder and copy the necessary files for an aut
 ```
 -project "Name of Project"
 	default: "untitled"
--version "8.2.0" or "3.3.5"
-	default: "8.2.0"
+-version "9.0.2" or "3.3.5"
+	default: "9.0.2"
 -realms "Trinity,Scarlet,Molten"
 	default ""
 ```	
@@ -119,7 +119,7 @@ Data/enUS/realmlist.ftw
 ```
 set realmlist url.to.authserver:port_number
 ```
-## 8.2.0
+## 9.0.2
 \_retail\_/WTF/Config.wtf
 ```
 SET portal "url.to.bnetserver:port_number"

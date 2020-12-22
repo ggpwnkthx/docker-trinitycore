@@ -1,6 +1,6 @@
 ﻿param (
     [string]$project = "untitled",
-    [string]$version = "8.2.0",
+    [string]$version = "9.0.2",
     [string]$realms = "Trinity",
     [bool]$development = $false
 )

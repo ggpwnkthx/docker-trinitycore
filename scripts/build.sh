@@ -28,7 +28,7 @@ BRANCH="${BRANCH:-master}"
 REPO="${REPO:-git://github.com/TrinityCore/TrinityCore.git}"
 
 if [ "$BRANCH" == "master" ]; then
-	VERSION="8.2.0"
+	VERSION="9.0.2"
 else
 	VERSION=$BRANCH
 fi

@@ -31,7 +31,7 @@ while true; do
     shift
 done
 PROJECT="${PROJECT:-untitled}"
-VERSION="${VERSION:-8.2.0}"
+VERSION="${VERSION:-9.0.2}"
 REALMS="${REALMS:-Trinity}"
 
 SCRIPTROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/.."
