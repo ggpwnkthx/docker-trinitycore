@@ -13,7 +13,7 @@ https://docs.docker.com/v17.12/install/linux/docker-ce/binaries/
 ### Windows
 https://docs.docker.com/docker-for-windows/install/
 ## Clients
-Clients must be in the "clients" folder. Put the contents of the WotLK folder into "clients/3.3.5". Put the contents of the BfA folder into "clients/8.2.0".
+Clients must be in the "clients" folder. Put the contents of the WotLK folder into "clients/3.3.5". Put the contents of the Shadowlands folder into "clients/9.0.2".
 For WotLK, the folder structure should look like:
 ```
 clients
@@ -22,7 +22,7 @@ clients
         Interface
         {other files}
 ```
-For BfA, the folder structure should look like:
+For Shadowlands, the folder structure should look like:
 ```
 clients
     9.0.2
@@ -43,7 +43,7 @@ All in one. Builds from source, adds a project, starts the project. Will passthr
 -b | --branch "master" or "3.3.5"
 	default: "master"
 ```	
-This script will clone (or update/pull) the TrinityCore source and build it. The repository can be changed, but for most people, the only argument you'll want to change is the branch. For BfA, use "master". For WotLK, use "3.3.5". 
+This script will clone (or update/pull) the TrinityCore source and build it. The repository can be changed, but for most people, the only argument you'll want to change is the branch. For Shadowlands, use "master". For WotLK, use "3.3.5". 
  
 ### add_project.sh
 ```
@@ -56,7 +56,7 @@ This script will clone (or update/pull) the TrinityCore source and build it. The
 -d | --development
 	default: false
 ```	
-This script will create a project folder and copy the necessary files for an authentication server and any specified (comma delimited) realms. One project can have both 3.3.5 and 8.2.0 world servers, but they will use separate authentication servers. One project will only have one authentication server for each version.
+This script will create a project folder and copy the necessary files for an authentication server and any specified (comma delimited) realms. One project can have both 3.3.5 and 9.0.2 world servers, but they will use separate authentication servers. One project will only have one authentication server for each version.
 	
 ### start_project.sh
 ```
@@ -79,7 +79,7 @@ All in one. Builds from source, adds a project, starts the project. Will passthr
 -branch "master" or "3.3.5"
 	default: "master"
 ```	
-This script will clone (or update/pull) the TrinityCore source and build it. The repository can be changed, but for most people, the only argument you'll want to change is the branch. For BfA, use "master". For WotLK, use "3.3.5". 
+This script will clone (or update/pull) the TrinityCore source and build it. The repository can be changed, but for most people, the only argument you'll want to change is the branch. For Shadowlands, use "master". For WotLK, use "3.3.5". 
  
 ### add_project.ps1
 ```
@@ -92,7 +92,7 @@ This script will clone (or update/pull) the TrinityCore source and build it. The
 -development $false
 	default: $false
 ```	
-This script will create a project folder and copy the necessary files for an authentication server and any specified (comma delimited) realms. One project can have both 3.3.5 and 8.2.0 world servers, but they will use separate authentication servers. One project will only have one authentication server for each version.
+This script will create a project folder and copy the necessary files for an authentication server and any specified (comma delimited) realms. One project can have both 3.3.5 and 9.0.2 world servers, but they will use separate authentication servers. One project will only have one authentication server for each version.
 	
 ### start_project.ps1
 ```
@@ -125,6 +125,6 @@ set realmlist url.to.authserver:port_number
 SET portal "url.to.bnetserver:port_number"
 ```
 ### Custom Client Launcher
-This is not required for WotLK, only for BfA clients.
-https://arctium.io/ -> World of Warcraft -> Client Launchers -> Custom Server -> Windows/macOS -> 8.2.0.x - ... .zip
+This is not required for WotLK, only for Shadowlands clients.
+https://arctium.io/ -> World of Warcraft -> Client Launchers -> Custom Server -> Windows/macOS -> 9.0.2.x - ... .zip
 Put the executable in the same folder as the \_retail\_ folder
