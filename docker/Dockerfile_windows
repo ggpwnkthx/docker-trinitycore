@@ -1,0 +1,42 @@
+# escape=`
+FROM mcr.microsoft.com/windows/servercore:20H2
+SHELL ["cmd", "/S", "/C"]
+
+# Download, Install, and Cleanup Build Environment Pre-requisites
+ADD https://github.com/PowerShell/PowerShell/releases/download/v7.1.0/PowerShell-7.1.0-win-x64.msi powershell.msi
+RUN msiexec /q /i powershell.msi
+RUN del /f powershell.msi
+RUN mkdir C:\BuildTools
+ADD https://aka.ms/vs/16/release/vs_buildtools.exe vs_buildtools.exe
+RUN vs_buildtools.exe --quiet --wait --norestart --nocache `
+		--add Microsoft.VisualStudio.Workload.VCTools `
+		--includeRecommended `
+	|| IF "%ERRORLEVEL%"=="3010" EXIT 0
+RUN del /f vs_buildtools.exe
+ADD https://github.com/Kitware/CMake/releases/download/v3.19.2/cmake-3.19.2-win64-x64.msi cmake.msi
+RUN msiexec /q /i cmake.msi
+RUN del /f cmake.msi
+ADD http://slproweb.com/download/Win64OpenSSL-1_1_1i.msi openssl.msi
+RUN msiexec /q /i openssl.msi
+RUN del /f openssl.msi
+ADD https://github.com/git-for-windows/git/releases/download/v2.29.2.windows.3/Git-2.29.2.3-64-bit.exe git.exe
+RUN git.exe /VERYSILENT /NORESTART
+RUN del /f git.exe
+ADD https://iweb.dl.sourceforge.net/project/boost/boost-binaries/1.72.0/boost_1_72_0-msvc-14.2-64.exe boost.exe
+RUN boost.exe /sp- /verysilent /suppressmsgboxes /norestart
+RUN del /f boost.exe
+ADD https://cdn.mysql.com//Downloads/MySQLInstaller/mysql-installer-community-8.0.22.0.msi mysql.msi
+RUN msiexec /q /i mysql.msi
+RUN del /f mysql.msi
+RUN ["C:/Program Files (x86)/MySQL/MySQL Installer for Windows/MySQLInstallerConsole.exe", "community", "install", "server;8.0.22", "-silent"]
+RUN del /f/q/s "C:/Program Files (x86)/MySQL"
+
+# Set System Variables
+RUN setx BOOST_ROOT "C:/local/boost_1_72_0"
+RUN for /f "skip=2 tokens=3*" %a in ('reg query HKCU\Environment /v PATH') do @if [%b]==[] ( @setx PATH "%~a;C:\Program Files\CMake\bin" ) else ( @setx PATH "%~a %~b;C:\Program Files\CMake\bin" )
+
+# PowerShell Tweaks
+#RUN for /f "skip=2 tokens=3*" %a in ('reg query HKCU\Environment /v PATH') do @if [%b]==[] ( @setx PATH "%~a;C:\Users\ContainerAdministrator\Documents\PowerShell\Scripts" ) else ( @setx PATH "%~a %~b;C:\Users\ContainerAdministrator\Documents\PowerShell\Scripts" )
+#RUN pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
+
+ENTRYPOINT ["pwsh","-c"]
