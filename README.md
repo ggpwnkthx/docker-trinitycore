@@ -26,10 +26,9 @@ For Shadowlands, the folder structure should look like:
 ```
 clients
     9.1.0
-        _classic_
         _retail_
         Data
-        {other files}
+        .build.info
 ```
 
 # Scripts
