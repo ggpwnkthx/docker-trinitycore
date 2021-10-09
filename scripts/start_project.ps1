@@ -34,7 +34,7 @@ docker run -it --rm `
 if(!(docker ps -qf "name=$CONTAINER_PREFIX`_auth_server")) {
     echo "Starting auth server..."
     switch($version) {
-        "8.2.0" {
+        "9.1.0" {
             $port_bnet = (docker run -it --rm `
                 -v $LOCAL_PROJECT_DIR\auth\bnetserver.conf:/opt/trinitycore/etc/bnetserver.conf `
                 trinitycore:universal bash -c "
@@ -183,19 +183,19 @@ foreach ($realm in $realms.Split(',')) {
 }
 
 # Start NUFAD
-if(!(docker ps -qf "name=$CONTAINER_PREFIX`_admin")) {
-    docker run -dP --rm `
-        --name $CONTAINER_PREFIX`_admin `
-        -e TC_PREFIX=$CONTAINER_PREFIX `
-        -e DUID=1000 `
-        -v $LOCAL_PROJECT_DIR\admin:/app `
-        --expose 443 `
-        trinitycore:admin | Out-Null
-    docker network connect $CONTAINER_PREFIX`_auth $CONTAINER_PREFIX`_admin | Out-Null
-    foreach ($realm in $realms.Split(',')) {
-        docker network connect $CONTAINER_PREFIX`_$realm $CONTAINER_PREFIX`_admin | Out-Null
-    }
-}
+#if(!(docker ps -qf "name=$CONTAINER_PREFIX`_admin")) {
+#    docker run -dP --rm `
+#        --name $CONTAINER_PREFIX`_admin `
+#        -e TC_PREFIX=$CONTAINER_PREFIX `
+#        -e DUID=1000 `
+#        -v $LOCAL_PROJECT_DIR\admin:/app `
+#        --expose 443 `
+#        trinitycore:admin | Out-Null
+#    docker network connect $CONTAINER_PREFIX`_auth $CONTAINER_PREFIX`_admin | Out-Null
+#    foreach ($realm in $realms.Split(',')) {
+#        docker network connect $CONTAINER_PREFIX`_$realm $CONTAINER_PREFIX`_admin | Out-Null
+#    }
+#}
 
 while(!$docker_inspect) { 
     $docker_inspect = (docker inspect --format='{{range $conf := .NetworkSettings.Ports}} {{(index $conf 0).HostPort}} {{end}}' $CONTAINER_PREFIX`_admin)

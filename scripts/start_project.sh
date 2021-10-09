@@ -61,7 +61,7 @@ docker run -it --rm \
 if [ -z "$(docker ps -qf name=$CONTAINER_PREFIX\_auth_server)" ]; then
 	echo "Starting auth server..."
 	case $VERSION in 
-		"8.2.0")
+		"9.1.0")
 			port_bnet=$(cat $LOCAL_PROJECT_DIR/auth/bnetserver.conf | grep -e '^BattlenetPort' | awk '{print $3}');
 			port_rest=$(cat $LOCAL_PROJECT_DIR/auth/bnetserver.conf | grep -e '^LoginREST\.Port' | awk '{print $3}');
 			docker run -dP --rm \
@@ -151,7 +151,7 @@ for realm in ${REALMS[@]}; do
 		port_soap=$(cat $LOCAL_REALM_DIR/worldserver.conf | grep -e '^SOAP.Port' | awk '{print $3}');
 		echo "Starting $realm realm server..."
 		case $VERSION in 
-			"8.2.0")
+			"9.1.0")
 				docker run -dP --rm \
 					--name $CONTAINER_PREFIX\_$realm\_server \
 					--network $CONTAINER_PREFIX\_$realm \
@@ -215,19 +215,19 @@ for realm in ${REALMS[@]}; do
 done
 
 # Start NUFAD
-if [ -z "$(docker ps -qf name=$CONTAINER_PREFIX\_admin)" ]; then
-    docker run -dP --rm \
-        --name $CONTAINER_PREFIX\_admin \
-        -e TC_PREFIX=$CONTAINER_PREFIX \
-        -e DUID=1000 \
-        -v $LOCAL_PROJECT_DIR\admin:/app \
-        --expose 443 \
-        trinitycore:admin
-    docker network connect $CONTAINER_PREFIX\_auth $CONTAINER_PREFIX\_admin
-    for realm in ${REALMS[@]}; do
-        docker network connect $CONTAINER_PREFIX\_$realm $CONTAINER_PREFIX\_admin
-    done
-fi
+#if [ -z "$(docker ps -qf name=$CONTAINER_PREFIX\_admin)" ]; then
+#    docker run -dP --rm \
+#        --name $CONTAINER_PREFIX\_admin \
+#        -e TC_PREFIX=$CONTAINER_PREFIX \
+#        -e DUID=1000 \
+#        -v $LOCAL_PROJECT_DIR\admin:/app \
+#        --expose 443 \
+#        trinitycore:admin
+#    docker network connect $CONTAINER_PREFIX\_auth $CONTAINER_PREFIX\_admin
+#    for realm in ${REALMS[@]}; do
+#        docker network connect $CONTAINER_PREFIX\_$realm $CONTAINER_PREFIX\_admin
+#    done
+#fi
 
 while [ -z "$docker_inspect" ]; do 
 	docker_inspect=($(docker inspect --format='{{range $conf := .NetworkSettings.Ports}} {{(index $conf 0).HostPort}} {{end}}' $CONTAINER_PREFIX\_admin))
