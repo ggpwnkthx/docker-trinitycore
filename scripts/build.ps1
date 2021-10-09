@@ -3,7 +3,7 @@
     [string]$repo = "git://github.com/TrinityCore/TrinityCore.git"
 )
 if($branch -eq "master") {
-    $version = "9.0.2"
+    $version = "9.1.0"
 } else {
     $version = $branch
 }

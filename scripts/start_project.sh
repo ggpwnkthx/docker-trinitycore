@@ -29,7 +29,7 @@ while true; do
 done
 
 PROJECT="${PROJECT:-untitled}"
-VERSION="${VERSION:-9.0.2}"
+VERSION="${VERSION:-9.1.0}"
 
 SQL_ROOT_PW="trinity_root"
 SCRIPTROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/.."

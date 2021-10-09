@@ -13,7 +13,7 @@ https://docs.docker.com/v17.12/install/linux/docker-ce/binaries/
 ### Windows
 https://docs.docker.com/docker-for-windows/install/
 ## Clients
-Clients must be in the "clients" folder. Put the contents of the WotLK folder into "clients/3.3.5". Put the contents of the Shadowlands folder into "clients/9.0.2".
+Clients must be in the "clients" folder. Put the contents of the WotLK folder into "clients/3.3.5". Put the contents of the Shadowlands folder into "clients/9.1.0".
 For WotLK, the folder structure should look like:
 ```
 clients
@@ -25,7 +25,7 @@ clients
 For Shadowlands, the folder structure should look like:
 ```
 clients
-    9.0.2
+    9.1.0
         _classic_
         _retail_
         Data
@@ -49,21 +49,21 @@ This script will clone (or update/pull) the TrinityCore source and build it. The
 ```
 -p | --project "Name of Project"
 	default: "untitled"
--v | --version "9.0.2" or "3.3.5"
-	default: "9.0.2"
+-v | --version "9.1.0" or "3.3.5"
+	default: "9.1.0"
 -r | --realms "Trinity,Scarlet,Molten"
 	default: "Trinity"
 -d | --development
 	default: false
 ```	
-This script will create a project folder and copy the necessary files for an authentication server and any specified (comma delimited) realms. One project can have both 3.3.5 and 9.0.2 world servers, but they will use separate authentication servers. One project will only have one authentication server for each version.
+This script will create a project folder and copy the necessary files for an authentication server and any specified (comma delimited) realms. One project can have both 3.3.5 and 9.1.0 world servers, but they will use separate authentication servers. One project will only have one authentication server for each version.
 	
 ### start_project.sh
 ```
 -p | --project "Name of Project"
 	default: "untitled"
--v | --version "9.0.2" or "3.3.5"
-	default: "9.0.2"
+-v | --version "9.1.0" or "3.3.5"
+	default: "9.1.0"
 -r | --realms "Trinity,Scarlet,Molten"
 	default ""
 ```	
@@ -85,21 +85,21 @@ This script will clone (or update/pull) the TrinityCore source and build it. The
 ```
 -project "Name of Project"
 	default: "untitled"
--version "9.0.2" or "3.3.5"
-	default: "9.0.2"
+-version "9.1.0" or "3.3.5"
+	default: "9.1.0"
 -realms "Trinity,Scarlet,Molten"
 	default: "Trinity"
 -development $false
 	default: $false
 ```	
-This script will create a project folder and copy the necessary files for an authentication server and any specified (comma delimited) realms. One project can have both 3.3.5 and 9.0.2 world servers, but they will use separate authentication servers. One project will only have one authentication server for each version.
+This script will create a project folder and copy the necessary files for an authentication server and any specified (comma delimited) realms. One project can have both 3.3.5 and 9.1.0 world servers, but they will use separate authentication servers. One project will only have one authentication server for each version.
 	
 ### start_project.ps1
 ```
 -project "Name of Project"
 	default: "untitled"
--version "9.0.2" or "3.3.5"
-	default: "9.0.2"
+-version "9.1.0" or "3.3.5"
+	default: "9.1.0"
 -realms "Trinity,Scarlet,Molten"
 	default ""
 ```	
@@ -119,12 +119,12 @@ Data/enUS/realmlist.ftw
 ```
 set realmlist url.to.authserver:port_number
 ```
-## 9.0.2
+## 9.1.0
 \_retail\_/WTF/Config.wtf
 ```
 SET portal "url.to.bnetserver:port_number"
 ```
 ### Custom Client Launcher
 This is not required for WotLK, only for Shadowlands clients.
-https://arctium.io/ -> World of Warcraft -> Client Launchers -> Custom Server -> Windows/macOS -> 9.0.2.x - ... .zip
+https://github.com/Arctium/WoW-Launcher/releases
 Put the executable in the same folder as the \_retail\_ folder
