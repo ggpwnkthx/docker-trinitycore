@@ -196,12 +196,12 @@ foreach ($realm in $realms.Split(',')) {
 #        docker network connect $CONTAINER_PREFIX`_$realm $CONTAINER_PREFIX`_admin | Out-Null
 #    }
 #}
-
-while(!$docker_inspect) { 
-    $docker_inspect = (docker inspect --format='{{range $conf := .NetworkSettings.Ports}} {{(index $conf 0).HostPort}} {{end}}' $CONTAINER_PREFIX`_admin)
-}
-$port_admin = $docker_inspect.Split(" ")[1]
-Remove-Variable docker_inspect | Out-Null
-echo ""
-Write-Host "Web admin services are running on port $port_admin" -Foreground Green -BackgroundColor Black
-echo ""
+#
+#while(!$docker_inspect) { 
+#    $docker_inspect = (docker inspect --format='{{range $conf := .NetworkSettings.Ports}} {{(index $conf 0).HostPort}} {{end}}' $CONTAINER_PREFIX`_admin)
+#}
+#$port_admin = $docker_inspect.Split(" ")[1]
+#Remove-Variable docker_inspect | Out-Null
+#echo ""
+#Write-Host "Web admin services are running on port $port_admin" -Foreground Green -BackgroundColor Black
+#echo ""

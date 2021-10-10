@@ -228,11 +228,11 @@ done
 #        docker network connect $CONTAINER_PREFIX\_$realm $CONTAINER_PREFIX\_admin
 #    done
 #fi
-
-while [ -z "$docker_inspect" ]; do 
-	docker_inspect=($(docker inspect --format='{{range $conf := .NetworkSettings.Ports}} {{(index $conf 0).HostPort}} {{end}}' $CONTAINER_PREFIX\_admin))
-done
-port_admin=${docker_inspect[0]}
-echo ""
-echo "Web admin services are running on port $port_admin"
-echo ""
+#
+#while [ -z "$docker_inspect" ]; do 
+#	docker_inspect=($(docker inspect --format='{{range $conf := .NetworkSettings.Ports}} {{(index $conf 0).HostPort}} {{end}}' $CONTAINER_PREFIX\_admin))
+#done
+#port_admin=${docker_inspect[0]}
+#echo ""
+#echo "Web admin services are running on port $port_admin"
+#echo ""
