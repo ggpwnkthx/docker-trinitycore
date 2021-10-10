@@ -31,6 +31,23 @@ echo "Waiting for auth database to be ready..."
 docker run -it --rm `
     --network $CONTAINER_PREFIX`_auth `
     mariadb:latest bash -c "while ! mysqladmin ping -hauth_db --silent; do sleep 1; done" | Out-Null
+
+# Check admin account
+echo "Checking initialization status..."
+$XML_file = New-TemporaryFile
+docker run -it --rm `
+    --network $CONTAINER_PREFIX`_auth `
+    -v $LOCAL_SOURCE_DIR\:/src/trinitycore `
+    mariadb:latest mysql -hauth_db -P3306 -uroot -p"$SQL_ROOT_PW" -Dauth -X -e "
+        SELECT COUNT(*) AS Count FROM account
+    ".Replace("`r","") | Out-File $XML_file
+[xml]$XML_data = Get-Content $XML_file
+Remove-Item $XML_file
+$FIRST_TIME_RUN = $false
+if ([int]($XML_data.resultset.row.field | Where-Object -Property "name" -EQ "Count").'#text' -eq 0) {
+    $FIRST_TIME_RUN = $true
+}
+$FIRST_TIME_RUN
 if(!(docker ps -qf "name=$CONTAINER_PREFIX`_auth_server")) {
     echo "Starting auth server..."
     switch($version) {
@@ -58,10 +75,10 @@ if(!(docker ps -qf "name=$CONTAINER_PREFIX`_auth_server")) {
                 trinitycore:universal bash -c "
                     /opt/trinitycore/bin/bnetserver
                 ".Replace("`r","") | Out-Null
-            echo ""
-            Write-Host "Bnetserver is running on port $port_bnet" -ForegroundColor Green -BackgroundColor Black
-            echo ""
-            break;
+                echo ""
+                Write-Host "Bnetserver is running on port $port_bnet" -ForegroundColor Green -BackgroundColor Black
+                echo ""
+                break;
         }
         "3.3.5" {
             $port_auth = (docker run -it --rm `
@@ -88,6 +105,7 @@ if(!(docker ps -qf "name=$CONTAINER_PREFIX`_auth_server")) {
         }
     }
 }
+
 
 if ($realms -eq "") {
     $realms = (Get-ChildItem -Directory -Path $LOCAL_PROJECT_DIR/realms | %{ echo $_.Name }) -Join(",")
@@ -141,7 +159,7 @@ foreach ($realm in $realms.Split(',')) {
         docker kill $CONTAINER_PREFIX`_portcheck | Out-Null
 
         echo "Starting $realm realm server..."
-        docker run -dP --rm `
+        docker run -d -it -P --rm `
             --name $CONTAINER_PREFIX`_$realm`_server `
             --network $CONTAINER_PREFIX`_$realm `
             --network-alias $realm`_world `

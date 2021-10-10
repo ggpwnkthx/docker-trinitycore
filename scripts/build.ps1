@@ -159,7 +159,8 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\base\mysql))
         ".Replace("`r","")
     docker kill $db_container
 }
-if(!(Test-Path $LOCAL_BUILD_DIR\db\auth\auth))
+
+if(!(Test-Path $LOCAL_BUILD_DIR\db\auth))
 {
     # Copy baseline and build auth database on top
     echo "Copying initial SQL data for auth..."
@@ -201,14 +202,14 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\auth\auth))
             cat /src/trinitycore/sql/base/auth_database.sql | mysql -h$sql_host_alias -P3306 -uroot -p$SQL_ROOT_PW -Dauth;
         ".Replace("`r","")
     # Add admin account
-    echo "Adding admin account for RA service..."
-    docker run -it --rm `
-        --network trinitycore_db_build_$version `
-        -v $LOCAL_SOURCE_DIR\:/src/trinitycore `
-        mariadb:latest mysql -h"$sql_host_alias" -P3306 -uroot -p"$SQL_ROOT_PW" -Dauth -e "
-            INSERT INTO account (id, username, sha_pass_hash) VALUES (1, 'ADMIN', '8301316D0D8448A34FA6D0C6BF1CBFA2B4A1A93A') ; `
-            INSERT INTO account_access (id, gmlevel, RealmID) VALUES (1, 3, -1) ; `
-        ".Replace("`r","")
+    #echo "Adding admin account for RA service..."
+    #docker run -it --rm `
+    #    --network trinitycore_db_build_$version `
+    #    -v $LOCAL_SOURCE_DIR\:/src/trinitycore `
+    #    mariadb:latest mysql -h"$sql_host_alias" -P3306 -uroot -p"$SQL_ROOT_PW" -Dauth -e "
+    #        INSERT INTO account (id, username, sha_pass_hash) VALUES (1, 'ADMIN', '8301316D0D8448A34FA6D0C6BF1CBFA2B4A1A93A') ; `
+    #        INSERT INTO account_access (id, gmlevel, RealmID) VALUES (1, 3, -1) ; `
+    #    ".Replace("`r","")
     docker kill $db_container
 }
 if(!(Test-Path $LOCAL_BUILD_DIR\db\realm\world))
@@ -278,8 +279,7 @@ if(!(Test-Path $LOCAL_BUILD_DIR\db\realm\world))
 }
 docker network rm trinitycore_db_build_$version
 
-# Git NUFAD for web-based administration
-<#
+<# Git NUFAD for web-based administration
 docker run -it --rm `
     -v $SCRIPTROOT\:/prepare `
     trinitycore:universal bash -c "

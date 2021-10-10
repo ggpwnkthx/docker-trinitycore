@@ -33,6 +33,7 @@ else
 	VERSION=$BRANCH
 fi
 SQL_ROOT_PW="trinity_root"
+
 SCRIPTROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/.."
 SOURCE_DIR=source/$VERSION
 LOCAL_SOURCE_DIR=$SCRIPTROOT/$SOURCE_DIR
@@ -43,7 +44,8 @@ LOCAL_CLIENT_DIR=$SCRIPTROOT/$CLIENT_DIR
 
 # Build compiler container
 echo "Building universal TrinityCore image..."
-docker build -t trinitycore:universal -f $SCRIPTROOT/docker/Dockerfile_universal $SCRIPTROOT/docker
+cd $SCRIPTROOT
+docker build -t trinitycore:universal -f ./docker/Dockerfile_universal ./docker
 
 # Create directories
 docker run -it --rm \
@@ -162,7 +164,7 @@ docker network create trinitycore_db_build_$VERSION
 
 # Start clean database server to get baseline binary SQL files
 SQL_HOST_ALIAS="trinitycore_db"
-if [ ! -d $LOCAL_BUILD_DIR\db\base\mysql ]; then
+if [ ! -d $LOCAL_BUILD_DIR/db/base/mysql ]; then
     echo "Starting SQL service..."
     db_container=$(docker run -dP --rm \
         --network trinitycore_db_build_$VERSION \
