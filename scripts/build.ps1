@@ -127,7 +127,7 @@ docker run -it --rm `
         sed -i 's/^LogsDir.*`$/LogsDir  \= \\\`"\/opt\/trinitycore\/logs\\\`"/g' /opt/trinitycore/etc/*;
         sed -i 's/^SourceDirectory.*`$/SourceDirectory  \= \\\`"\/src\/trinitycore\\\`"/g' /opt/trinitycore/etc/*;
         sed -i 's/^BuildDirectory.*`$/BuildDirectory  \= \\\`"\/src\/trinitycore\/build\\\`"/g' /opt/trinitycore/etc/*;
-        sed -i 's/^Console.Enable.*`$/Console.Enable \= 0/g' /opt/trinitycore/etc/*;
+        sed -i 's/^Console.Enable.*`$/Console.Enable \= 1/g' /opt/trinitycore/etc/*;
         sed -i 's/^Ra.Enable.*`$/Ra.Enable \= 1/g' /opt/trinitycore/etc/*;
         sed -i 's/^SOAP.Enable.*`$/SOAP.Enable \= 1/g' /opt/trinitycore/etc/*;
         sed -i 's/^SOAP.IP.*`$/SOAP.IP \= \\\`"0.0.0.0\\\`"/g' /opt/trinitycore/etc/*;

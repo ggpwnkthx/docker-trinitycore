@@ -150,7 +150,7 @@ docker run -it --rm \
         sed -i 's/^LogsDir.*$/LogsDir  \= \\\"\/opt\/trinitycore\/logs\\\"/g' /opt/trinitycore/etc/*;
         sed -i 's/^SourceDirectory.*$/SourceDirectory  \= \\\"\/src\/trinitycore\\\"/g' /opt/trinitycore/etc/*;
         sed -i 's/^BuildDirectory.*$/BuildDirectory  \= \\\"\/src\/trinitycore\/build\\\"/g' /opt/trinitycore/etc/*;
-        sed -i 's/^Console.Enable.*$/Console.Enable \= 0/g' /opt/trinitycore/etc/*;
+        sed -i 's/^Console.Enable.*$/Console.Enable \= 1/g' /opt/trinitycore/etc/*;
         sed -i 's/^Ra.Enable.*$/Ra.Enable \= 1/g' /opt/trinitycore/etc/*;
         sed -i 's/^SOAP.Enable.*$/SOAP.Enable \= 1/g' /opt/trinitycore/etc/*;
         sed -i 's/^SOAP.IP.*$/SOAP.IP \= \\\"0.0.0.0\\\"/g' /opt/trinitycore/etc/*;
@@ -224,14 +224,14 @@ if [ ! -d $LOCAL_BUILD_DIR/db/auth ]; then
             cat /src/trinitycore/sql/base/auth_database.sql | mysql -h$SQL_HOST_ALIAS -P3306 -uroot -p$SQL_ROOT_PW -Dauth;
         "
     # Add admin account
-    echo "Adding admin account for RA service..."
-    docker run -it --rm \
-        --network trinitycore_db_build_$VERSION \
-        -v $LOCAL_SOURCE_DIR\:/src/trinitycore \
-        mariadb:latest mysql -h"$SQL_HOST_ALIAS" -P3306 -uroot -p"$SQL_ROOT_PW" -Dauth -e "
-            INSERT INTO account (id, username, sha_pass_hash) VALUES (1, 'ADMIN', '8301316D0D8448A34FA6D0C6BF1CBFA2B4A1A93A') ; 
-            INSERT INTO account_access (id, gmlevel, RealmID) VALUES (1, 3, -1) ; 
-        "
+    #echo "Adding admin account for RA service..."
+    #docker run -it --rm \
+    #    --network trinitycore_db_build_$VERSION \
+    #    -v $LOCAL_SOURCE_DIR\:/src/trinitycore \
+    #    mariadb:latest mysql -h"$SQL_HOST_ALIAS" -P3306 -uroot -p"$SQL_ROOT_PW" -Dauth -e "
+    #        INSERT INTO account (id, username, sha_pass_hash) VALUES (1, 'ADMIN', '8301316D0D8448A34FA6D0C6BF1CBFA2B4A1A93A') ; 
+    #        INSERT INTO account_access (id, gmlevel, RealmID) VALUES (1, 3, -1) ; 
+    #    "
     docker kill $db_container
 fi
 

@@ -152,7 +152,7 @@ for realm in ${REALMS[@]}; do
 		echo "Starting $realm realm server..."
 		case $VERSION in 
 			"9.1.0")
-				docker run -dP --rm \
+				docker run -d -it -P --rm \
 					--name $CONTAINER_PREFIX\_$realm\_server \
 					--network $CONTAINER_PREFIX\_$realm \
 					--network-alias $realm\_world \
@@ -174,7 +174,7 @@ for realm in ${REALMS[@]}; do
 					";
 				;;
 			"3.3.5")
-				docker run -dP --rm \
+				docker run -d -it -P --rm \
 					--name $CONTAINER_PREFIX\_$realm\_server \
 					--network $CONTAINER_PREFIX\_$realm \
 					--network-alias $realm\_world \
