@@ -231,10 +231,10 @@ if [ ! -d $LOCAL_BUILD_DIR/db/auth ]; then
                 --network trinitycore_db_build_$VERSION \
                 -v $LOCAL_SOURCE_DIR\:/src/trinitycore \
                 mariadb:latest mysql -h"$SQL_HOST_ALIAS" -P3306 -uroot -p"$SQL_ROOT_PW" -Dauth -e "
-                    INSERT INTO 'account' ('username','salt','verifier','email','reg_mail','battlenet_account','battlenet_index')
+                    INSERT INTO account (username,salt,verifier,email,reg_mail,battlenet_account,battlenet_index)
                     VALUES ('1#1', _binary 0xbc79f33212dc3c41c0402868ce45611c17b2ed5229d4422d4ba05e623788f711, _binary 0x0939d3b5bae1e98fe77f447bca34aeedbd59ddb6c6c7ad302e5f4feb6c9b7e5f, '@ADMIN', '@ADMIN', 1, 1);
-                    INSERT INTO 'account_access' ('AccountID', 'SecurityLevel', 'RealmID') VALUES (1, 3, -1);
-                    INSERT INTO 'battlenet_accounts' ('email', 'sha_pass_hash') VALUES ('@ADMIN', 'F00BE58CA64D719A2D32EB8E936738ABCE8871F4DEE31E85724C3D7AF769F145' );
+                    INSERT INTO account_access (AccountID, SecurityLevel, RealmID) VALUES (1, 3, -1);
+                    INSERT INTO battlenet_accounts (email, sha_pass_hash) VALUES ('@ADMIN', 'F00BE58CA64D719A2D32EB8E936738ABCE8871F4DEE31E85724C3D7AF769F145' );
                 ";;
 		"3.3.5")
             docker run -it --rm \
